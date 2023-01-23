@@ -215,7 +215,7 @@ installed winget                    || mkwrapper winget                    "$WIN
 # ======================================================================================================
 $RESTART && {
     echo "Going to shutdown $WSL_DISTRO_NAME in 5 seconds... Please restart manually..."
-    echo "After restart do: docker login registry.dcc.dfs.de"
+    echo "After restart do: docker login registry.your.local.one"
     for i in {1..5}; do sleep 1; echo -n . ; done
     echo "Bye ;-)"
 
