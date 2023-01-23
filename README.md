@@ -25,8 +25,19 @@ The setup is performed via the following commands:
 # ensure "set +o posix"
 set +o posix # if neccessary
 bash <(curl -s https://raw.githubusercontent.com/docdnp/wsl-convenience/main/setup-wsl.sh)
+```
 
-# or 
+Alternatively use the Windows `curl.exe` in case the distribution you have has no curl installed yet.
+
+```[bash]
+# ensure "set +o posix"
+set +o posix # if neccessary
+bash <(curl.exe -s https://raw.githubusercontent.com/docdnp/wsl-convenience/main/setup-wsl.sh)
+```
+
+Or as by downloading and exectuting it:
+
+```[bash]
 curl -s https://raw.githubusercontent.com/docdnp/wsl-convenience/main/setup-wsl.sh > YOUR_PLACE
 bash YOUR_PLACE
 ```
