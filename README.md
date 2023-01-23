@@ -17,6 +17,33 @@ Actually everybody has other needs. The very basic tools and functionality I nee
 After searching around I figured out how to achieve all of these features.
 As I'm lazy I've created a script that helps me setting up a distro in a reproducable way.
 
+## Installation
+
+The setup is performed via the following commands:
+
+```[bash]
+# ensure "set +o posix"
+set +o posix # if neccessary
+bash <(curl -s https://raw.githubusercontent.com/docdnp/wsl-convenience/main/setup-wsl.sh)
+
+# or 
+curl -s https://raw.githubusercontent.com/docdnp/wsl-convenience/main/setup-wsl.sh > YOUR_PLACE
+bash YOUR_PLACE
+```
+
+This installs the following assets:
+
+* Under Windows:
+  * Git
+  * Git Credential Helper
+  * Git LFS
+  * Docker Credential Helper
+* On Linux:
+  * crudini
+  * curl
+  * docker.io
+  * git
+
 ## bashrc functions: wsl-which
 
 As the windows paths slow down extremly the autocompletion of bash, I decided to remove them.
