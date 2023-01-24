@@ -189,7 +189,7 @@ fi
 
 # ======================================================================================================
 DOCKERCRED="$WINHOME/AppData/Local/Docker/docker-credential-wincred"
-! [ -e "$WINHOME/AppData/Local/Docker/docker-credential-wincred" ] && {
+! [ -e "$DOCKERCRED" ] && {
     echo "Setting up docker and docker credential helper."
     curl https://github.com/docker/docker-credential-helpers/releases 2>/dev/null \
         | perl -ne '/(\/docker.*checksums\.txt)/ && do { 
