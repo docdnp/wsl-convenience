@@ -87,7 +87,6 @@ grep "added by setup-wsl.sh" ~/.bashrc >&/dev/null || {
 echo "Adding helpful stuff to ~/.bashrc"
 
 cat <<EOF >> ~/.bashrc
-
 ## Next lines were added by setup-wsl.sh
 export WINHOME="$WINHOME"
 export PATH=~/.local/bin:\$PATH
@@ -104,7 +103,7 @@ EOT
 
 wsl-which () {
     local pattern whichcache=/tmp/wsl-which.db grepi=""
-    local exts="'*.exe' '*.cmd' '*.com' '*.cpl' '*.msc' '*.ps1' '*.vbs' '*.wsf'"
+    local exts=('*.exe' '*.cmd' '*.com' '*.cpl' '*.msc' '*.ps1' '*.vbs' '*.wsf')
     while [ \$# -gt 0 ] ; do
         case "\$1" in
             -h|--help)  __wsl_which_usage; return;;
@@ -117,8 +116,8 @@ wsl-which () {
     pattern=\${pattern:-.}
 
     [ -r "\$whichcache" ] || {
-        pwsh -c "where.exe \$exts;
-                 where.exe -R \"\\\$HOME\" \$exts" 2>/dev/null \\
+        { where \${exts[@]};
+          where -R "$(wslpath -w "\$WINHOME")" "\${exts[@]}" 2>/dev/null ; } \\
                 | perl -pe 's|\\\\|/|g' \\
                 | xargs -i wslpath -u '{}' \\
                 | perl -pe 's| |\\\\ |g ; s|\r||g'
@@ -152,6 +151,18 @@ to-alias () {
              }ex' | tee /dev/stderr >> \$aliases
 }
 
+wsl-convenience-uninstall () {
+    local PKGS=(docker-credential-wincred
+                git-credential-manager
+                powershell
+                winget
+                wsl
+    )
+    for i in \${PKGS[@]} ; do rm ~/.local/bin/\$i ; done
+    sed -i '/^## Next.*setup-wsl.sh/,/^## Prev.*setup-wsl.sh/{//!d}' ~/.bashrc;
+    sed -ire 's/^.*setup-wsl.sh.*//g' ~/.bashrc
+} 
+
 my_prompt () { printf "\e]9;9;%s\e\\\\" "\$(wslpath -w "\$PWD")" ; }
 export PROMPT_COMMAND=my_prompt
 
@@ -159,7 +170,6 @@ PS1='\${debian_chroot:+(\$debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033
 PS1="\[\e]0;\${WSL_DISTRO_NAME}: \w\a\]\$PS1"
 
 ## Previous lines were added by setup-wsl.sh
-
 EOF
 }
 
