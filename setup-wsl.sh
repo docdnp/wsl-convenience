@@ -92,7 +92,7 @@ git config --global --get user.name | contains "$WINUSER" || {
     echo "Setting up git... credential manager: $GITCREDMGR"
 
     git config --global user.name  "$WINUSER"
-    git config --global user.email "$MAIL"
+    git config --global user.email "$EMAIL"
     git config --global credential.helper ~/.local/bin/git-credential-manager
 }
 
