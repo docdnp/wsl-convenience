@@ -73,7 +73,7 @@ $WINGET list |  perl -ne 'BEGIN{ @P=qw('"${PKGS[*]}"'); $p=join("|", @P)} /$p/ &
 installed apt && {
     installed git || {
         echo "Installing Git for debian based linux..."
-        sudo apt install -y git-all 
+        sudo apt install -y git 
     }
 }
 
