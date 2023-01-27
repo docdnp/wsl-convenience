@@ -53,6 +53,7 @@ echo "WINHOME=$WINHOME"
 
 mkdir -p $WINHOME/AppData/Local/Docker; 
 mkdir -p ~/.local/bin
+mkdir -p ~/.docker
 
 # =======================================================================================================================
 # GIT WIN & LINUX: 
@@ -282,8 +283,7 @@ havepkg docker-ce || {
     sudo usermod -a -G docker $USER
 }
 
-cat ~/.docker/config.json | contains 'credStore.*wincred' || {
-    mkdir -p ~/.docker/config.json
+cat ~/.docker/config.json 2>/dev/null | contains 'credStore.*wincred' || {
     echo "Setting up credential store..."
     echo -e "{\n  \"credStore\": \"wincred\"\n}" > ~/.docker/config.json
     RESTART=true
