@@ -88,7 +88,7 @@ EMAIL=$($WHOAMI /UPN)
 git config --global --get user.name | contains "$WINUSER" || {
     echo "Setting up git... "
     echo "Setting up git...  user: $WINUSER"
-    echo "Setting up git... email: $MAIL"
+    echo "Setting up git... email: $EMAIL"
     echo "Setting up git... credential manager: $GITCREDMGR"
 
     git config --global user.name  "$WINUSER"
