@@ -33,7 +33,7 @@ echo "Checking preconditions... "
 DISTRO=$(distro)
 
 installed crudini || {
-    apt update
+    sudo apt update
     echo "Installing helper tool: crudini"
     sudo apt install -y crudini
 }
