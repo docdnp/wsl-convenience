@@ -41,7 +41,7 @@ installed curl              || sudo apt install -y curl
 havepkg   bash-completion   || sudo apt install -y bash-completion
 
 WINGET="$(wintool winget.exe)"
-$WINGET list  --accept-source-agreements | contains Microsoft.PowerShell || winget install Microsoft.PowerShell
+$WINGET list  --accept-source-agreements | contains Microsoft.PowerShell || $WINGET install Microsoft.PowerShell
 # =======================================================================================================================
 # GET WINHOME
 # =======================================================================================================================
