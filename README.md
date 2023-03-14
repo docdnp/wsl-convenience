@@ -55,6 +55,12 @@ This installs the following assets:
   * docker.io
   * git
 
+To uninstall changes in `.bashrc` and remove wrapper tools under `.local/bin` do:
+
+```[bash]
+wsl-convenience-uninstall
+```
+
 ## bashrc functions: wsl-which
 
 As the windows paths slow down extremly the autocompletion of bash, I decided to remove them.
