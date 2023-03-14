@@ -283,6 +283,7 @@ havepkg docker-ce || {
 }
 
 cat ~/.docker/config.json | contains 'credStore.*wincred' || {
+    mkdir -p ~/.docker/config.json
     echo "Setting up credential store..."
     echo -e "{\n  \"credStore\": \"wincred\"\n}" > ~/.docker/config.json
     RESTART=true
