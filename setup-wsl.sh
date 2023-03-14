@@ -40,7 +40,8 @@ installed crudini || {
 installed curl              || sudo apt install -y curl
 havepkg   bash-completion   || sudo apt install -y bash-completion
 
-winget list | contains Microsoft.PowerShell || winget install Microsoft.PowerShell
+WINGET="$(wintool winget.exe)"
+$WINGET list | contains Microsoft.PowerShell || winget install Microsoft.PowerShell
 # =======================================================================================================================
 # GET WINHOME
 # =======================================================================================================================
@@ -58,7 +59,6 @@ mkdir -p ~/.local/bin
 #  * https://winget.run/pkg/Git/Git
 #  * https://github.com/git-guides/install-git
 # =======================================================================================================================
-WINGET="$(wintool winget.exe)"
 PKGS=(Git.Git GitHub.GitLFS Microsoft.GitCredentialManagerCore)
 $WINGET list |  perl -ne 'BEGIN{ @P=qw('"${PKGS[*]}"'); $p=join("|", @P)} /$p/ && $i++; END{ exit ($i == @P ? 0 : 1) }'
 
@@ -293,6 +293,8 @@ installed powershell                || mkwrapper powershell                "$POW
 installed git-credential-manager    || mkwrapper git-credential-manager    "$GITCREDMGR"
 installed docker-credential-wincred || mkwrapper docker-credential-wincred "$DOCKERCRED"
 installed winget                    || mkwrapper winget                    "$WINGET"
+installed choco                     || mkwrapper choco                     "$(wintool choco)"
+installed shutdown                  || mkwrapper shutdown                  "$(wintool shutdown)"
 
 # =======================================================================================================================
 $RESTART && {
