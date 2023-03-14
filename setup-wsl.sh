@@ -153,16 +153,14 @@ wsl-which () {
     pattern=\${pattern:-.}
 
     [ -r "\$whichcache" ] || {
-        local OIFS="\$IFS"
         { where \${exts[@]};
-          
+          local IFS=$'\n'
           for i in \$WINHOME \$(ls -1d /mnt/c/Pr*) ; do
-            where -R "\$(wslpath -w "\$i")" "\${exts[@]}" 2>/dev/null 
+            where -R "\$(wslpath -w ""\$i"")" "\${exts[@]}" 2>/dev/null 
           done; } \\
                 | perl -pe 's|\\\\|/|g' \\
                 | xargs -i wslpath -u '{}' \\
                 | perl -pe 's| |\\\\ |g ; s|\r||g'
-        IFS=\$OIFS
     } | sort -u > \$whichcache
     grep --color=never -E\$grepi ".*/\$pattern" \$whichcache 
 }
