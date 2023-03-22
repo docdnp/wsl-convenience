@@ -123,6 +123,7 @@ echo "Adding helpful stuff to ~/.bashrc"
 cat <<EOF >> ~/.bashrc
 ## Next lines were added by setup-wsl.sh
 export WINHOME="$WINHOME"
+export WSL_WHICH_DB=~/.local/share/wsl-which.db
 export PATH=~/.local/bin:\$PATH
 alias where=/mnt/c/Windows/system32/where.exe
 alias pwsh=$POWERSHELL
@@ -138,9 +139,20 @@ Usage: wsl-which [OPTS|GREP]
     -h, --help          show this help
 EOT
 }
-
+__wsl_which_complete () {
+    [ \$COMP_CWORD -gt 2 ] && return
+    local IFS=$'\n' OPTS='^(-(-update|-help|h|u|i))$' 
+    local WORD="\${COMP_WORDS[\$COMP_CWORD]}" PWORD="\${COMP_WORDS[\$((COMP_CWORD-1))]}"
+    case \$WORD in # check current word
+        -*) [ \$COMP_CWORD -gt 1 ] && [[ "\$PWORD" =~ \$OPTS ]] && return
+            IFS=\$' \t\n'; COMPREPLY=($(compgen -W "--update --help -h -u -i" -- "\$WORD")) ;;
+        *)  [ \$COMP_CWORD -gt 1 ] && ! [[ "\$PWORD" =~ \$OPTS ]] && return
+            IFS=\$'\n'; COMPREPLY=(\$(compgen -W "\$(IFS=\$' '; \$COMP_LINE | sed -re 's|^.*/||')" -- "\$WORD")) ;;
+    esac
+}
+complete -o nosort -F __wsl_which_complete wsl-which
 wsl-which () {
-    local pattern whichcache=/tmp/wsl-which.db grepi=""
+    local pattern whichcache=\${WSL_WHICH_DB:-/tmp/wsl-which.db} grepi=""
     local exts=('*.exe' '*.cmd' '*.com' '*.cpl' '*.msc' '*.ps1' '*.vbs' '*.wsf')
     while [ \$# -gt 0 ] ; do
         case "\$1" in
@@ -163,7 +175,7 @@ wsl-which () {
                 | xargs -i wslpath -u '{}' \\
                 | perl -pe 's| |\\\\ |g ; s|\r||g'
     } | sort -u > \$whichcache
-    grep --color=never -E\$grepi ".*/\$pattern" \$whichcache 
+    grep --color=never -E\$grepi "^.*/\$pattern[^/]*\$" \$whichcache 
 }
 EOF
 
