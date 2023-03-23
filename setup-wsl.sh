@@ -122,6 +122,7 @@ echo "Adding helpful stuff to ~/.bashrc"
 # Export WINHOME and basic aliases
 cat <<EOF >> ~/.bashrc
 ## Next lines were added by setup-wsl.sh
+## Updated at $(date)
 export WINHOME="$WINHOME"
 export WSL_WHICH_DB=~/.local/share/wsl-which.db
 export PATH=~/.local/bin:\$PATH
@@ -133,7 +134,7 @@ EOF
 cat <<EOF >> ~/.bashrc
 __wsl_which_usage () {
 cat <<EOT
-Usage: wsl-which [OPTS|GREP]
+Usage: wsl-which [OPTS|GREP] (db: \$WSL_WHICH_DB)
     -u, --update        reload the cache file
     -i                  use case insensitive grep pattern 
     -h, --help          show this help
@@ -208,6 +209,46 @@ to-alias () {
              }ex' | tee /dev/stderr >> \$aliases
 }
 EOF
+
+# Provide tool to create bash script wrappers mostly for windows executables
+cat <<EOF >> ~/.bashrc
+to-bin () {
+    local tool argtool wrap preserve_case=false stop=false verbose=false
+    local usage="Usage: to-bin [--preserve-case|-p] [--tool|-t <tool>] [-v|--verbose]
+
+        Creates a wrapper for a tool either read from stdin or
+        provided by --tool under ~/.local/bin.
+
+        If --tool isn't given read from stdin.
+        Case isn't preserved by default.
+        Shows what it creates with --verbose.
+    "  
+    while [ \$# -gt 0 ] ; do
+        case "\$1" in
+            -h|--help)  echo "\$usage" ; return;;
+            --preserve-case|-p) preserve_case=true; shift ;;
+            --verbose|-v) verbose=true; shift ;;
+            --tool|-t) argtool="\$2"; shift 2; [ -z "\$argtool" ] && { echo \$usage; return; } ;; 
+            -*|*) echo "Unknown argument/opt: \$1"; echo \$usage; return;;
+        esac
+    done
+    tool=\$argtool
+    until \$stop ; do 
+                [ -n "\$argtool" ] && stop=true \
+            || read -t 2 tool && stop=false \
+            || stop=true
+        [ -z "\$tool" ] && return
+        wrap=\$(basename "\$tool")
+        wrap=\${wrap%.*}
+        \$preserve_case || wrap=\${wrap,,}
+        \$verbose && echo "\$tool => \$wrap (~/.local/bin)"
+        echo -e "#!/bin/bash\n\"\$tool\" \"\\\$@\"" > ~/.local/bin/\$wrap
+        chmod +x ~/.local/bin/\$wrap;
+    done 
+
+}
+EOF
+
 
 # Provide an 'uninstaller'
 cat <<EOF >> ~/.bashrc
