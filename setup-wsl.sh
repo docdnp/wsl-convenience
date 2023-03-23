@@ -249,6 +249,12 @@ to-bin () {
 }
 EOF
 
+# Provide an 'updater' for functions in bashrc
+cat <<EOF >> ~/.bashrc
+wsl-convenience-update-bashrc () {
+    curl --progress-bar https://raw.githubusercontent.com/docdnp/wsl-convenience/main/update-wsl-bashrc.sh | bash
+} 
+EOF
 
 # Provide an 'uninstaller'
 cat <<EOF >> ~/.bashrc
