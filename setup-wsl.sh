@@ -130,6 +130,10 @@ alias where=/mnt/c/Windows/system32/where.exe
 alias pwsh=$POWERSHELL
 EOF
 
+# make neccessary directories
+mkdir -p ~/.local/share
+mkdir -p ~/.local/bin
+
 # Provide a 'which' like tool for windows executables
 cat <<EOF >> ~/.bashrc
 __wsl_which_usage () {
